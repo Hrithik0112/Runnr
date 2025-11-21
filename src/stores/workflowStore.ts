@@ -18,9 +18,11 @@ interface WorkflowState {
   updateTrigger: (trigger: TriggerConfig) => void;
   setSelectedNode: (node: SelectedNode) => void;
   
-  // History actions (for undo/redo - will be implemented later)
+  // History actions
   undo: () => void;
   redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 const createEmptyWorkflow = (): Workflow => ({
@@ -38,12 +40,22 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   selectedNode: { type: null },
   history: [createEmptyWorkflow()],
   historyIndex: 0,
+  canUndo: false,
+  canRedo: false,
 
   setWorkflow: (workflow) => {
+    const { history, historyIndex } = get();
+    // Limit history to 50 entries to prevent memory issues
+    const maxHistory = 50;
+    const newHistory = [...history.slice(0, historyIndex + 1), workflow].slice(-maxHistory);
+    const newIndex = Math.min(newHistory.length - 1, historyIndex + 1);
+    
     set({ 
       workflow,
-      history: [...get().history, workflow],
-      historyIndex: get().historyIndex + 1
+      history: newHistory,
+      historyIndex: newIndex,
+      canUndo: newIndex > 0,
+      canRedo: newIndex < newHistory.length - 1
     });
   },
 
@@ -192,7 +204,9 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
       const newIndex = historyIndex - 1;
       set({
         workflow: history[newIndex],
-        historyIndex: newIndex
+        historyIndex: newIndex,
+        canUndo: newIndex > 0,
+        canRedo: true
       });
     }
   },
@@ -203,7 +217,9 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
       const newIndex = historyIndex + 1;
       set({
         workflow: history[newIndex],
-        historyIndex: newIndex
+        historyIndex: newIndex,
+        canUndo: true,
+        canRedo: newIndex < history.length - 1
       });
     }
   }

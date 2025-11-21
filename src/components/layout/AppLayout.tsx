@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { DndContext, DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import { useWorkflowStore } from '../../stores/workflowStore'
+import TopBar from './TopBar'
 
 interface AppLayoutProps {
   sidebar: ReactNode
@@ -47,10 +48,7 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div className="w-full h-full flex flex-col bg-gray-50">
         {/* Top Bar */}
-        <div className="h-14 bg-white border-b border-gray-200 flex items-center px-4 shadow-sm">
-          <h1 className="text-xl font-bold text-gray-900">Runnr</h1>
-          <span className="ml-2 text-sm text-gray-500">Visual CI/CD Pipeline Builder</span>
-        </div>
+        <TopBar />
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
