@@ -67,42 +67,141 @@ export function workflowToYAML(workflow: Workflow): string {
   }
 }
 
+export interface ValidationIssue {
+  type: 'error' | 'warning'
+  message: string
+  jobId?: string
+  stepIndex?: number
+}
+
 /**
  * Validates that the workflow has the minimum required structure
  */
-export function validateWorkflow(workflow: Workflow): { valid: boolean; errors: string[] } {
+export function validateWorkflow(workflow: Workflow): { 
+  valid: boolean
+  errors: string[]
+  warnings: string[]
+  issues: ValidationIssue[]
+} {
   const errors: string[] = []
+  const warnings: string[] = []
+  const issues: ValidationIssue[] = []
+  const jobIds = workflow.jobs ? Object.keys(workflow.jobs) : []
 
   // Check for 'on' trigger
   if (!workflow.on || Object.keys(workflow.on).length === 0) {
-    errors.push('Workflow must have at least one trigger (on)')
+    const msg = 'Workflow must have at least one trigger (on)'
+    errors.push(msg)
+    issues.push({ type: 'error', message: msg })
   }
 
   // Check for jobs
   if (!workflow.jobs || Object.keys(workflow.jobs).length === 0) {
-    errors.push('Workflow must have at least one job')
+    const msg = 'Workflow must have at least one job'
+    errors.push(msg)
+    issues.push({ type: 'error', message: msg })
   } else {
     // Validate each job
     Object.entries(workflow.jobs).forEach(([jobId, job]) => {
+      // Check runs-on
       if (!job['runs-on']) {
-        errors.push(`Job "${jobId}" must specify a runner (runs-on)`)
+        const msg = `Job "${jobId}" must specify a runner (runs-on)`
+        errors.push(msg)
+        issues.push({ type: 'error', message: msg, jobId })
       }
+
+      // Check job name
+      if (!job.name || job.name.trim() === '') {
+        const msg = `Job "${jobId}" should have a descriptive name`
+        warnings.push(msg)
+        issues.push({ type: 'warning', message: msg, jobId })
+      }
+
+      // Check dependencies
+      if (job.needs && job.needs.length > 0) {
+        job.needs.forEach((neededJobId) => {
+          if (!jobIds.includes(neededJobId)) {
+            const msg = `Job "${jobId}" depends on "${neededJobId}" which does not exist`
+            errors.push(msg)
+            issues.push({ type: 'error', message: msg, jobId })
+          }
+        })
+      }
+
+      // Check for circular dependencies (basic check)
+      if (job.needs && job.needs.includes(jobId)) {
+        const msg = `Job "${jobId}" cannot depend on itself`
+        errors.push(msg)
+        issues.push({ type: 'error', message: msg, jobId })
+      }
+
+      // Check steps
       if (!job.steps || job.steps.length === 0) {
-        errors.push(`Job "${jobId}" must have at least one step`)
+        const msg = `Job "${jobId}" must have at least one step`
+        errors.push(msg)
+        issues.push({ type: 'error', message: msg, jobId })
       } else {
         // Validate each step
         job.steps.forEach((step, index) => {
+          // Check if step has uses or run
           if (!step.uses && !step.run) {
-            errors.push(`Job "${jobId}", step ${index + 1} must have either "uses" or "run"`)
+            const msg = `Job "${jobId}", step ${index + 1} must have either "uses" or "run"`
+            errors.push(msg)
+            issues.push({ type: 'error', message: msg, jobId, stepIndex: index })
+          }
+
+          // Check if step has both uses and run (shouldn't happen, but warn)
+          if (step.uses && step.run) {
+            const msg = `Job "${jobId}", step ${index + 1} has both "uses" and "run" - only one should be used`
+            warnings.push(msg)
+            issues.push({ type: 'warning', message: msg, jobId, stepIndex: index })
+          }
+
+          // Check for checkout step (best practice)
+          if (index === 0 && !step.uses?.includes('checkout')) {
+            const msg = `Job "${jobId}" should start with a checkout step`
+            warnings.push(msg)
+            issues.push({ type: 'warning', message: msg, jobId })
+          }
+
+          // Check step name
+          if (!step.name && step.run) {
+            const msg = `Job "${jobId}", step ${index + 1} should have a descriptive name`
+            warnings.push(msg)
+            issues.push({ type: 'warning', message: msg, jobId, stepIndex: index })
+          }
+
+          // Check action version (best practice)
+          if (step.uses && !step.uses.includes('@')) {
+            const msg = `Job "${jobId}", step ${index + 1} action "${step.uses}" should specify a version (e.g., @v1)`
+            warnings.push(msg)
+            issues.push({ type: 'warning', message: msg, jobId, stepIndex: index })
           }
         })
       }
     })
   }
 
+  // Check for workflow name
+  if (!workflow.name || workflow.name.trim() === '') {
+    const msg = 'Workflow should have a descriptive name'
+    warnings.push(msg)
+    issues.push({ type: 'warning', message: msg })
+  }
+
+  // Check for duplicate job IDs (shouldn't happen, but validate)
+  const duplicateJobIds = jobIds.filter((id, index) => jobIds.indexOf(id) !== index)
+  if (duplicateJobIds.length > 0) {
+    const msg = `Duplicate job IDs found: ${duplicateJobIds.join(', ')}`
+    errors.push(msg)
+    issues.push({ type: 'error', message: msg })
+  }
+
   return {
     valid: errors.length === 0,
     errors,
+    warnings,
+    issues,
   }
 }
 

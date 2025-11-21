@@ -10,12 +10,14 @@ export default function YAMLPreview() {
   const workflow = useWorkflowStore((state) => state.workflow)
   const [yamlContent, setYamlContent] = useState('')
   const [validationErrors, setValidationErrors] = useState<string[]>([])
+  const [validationWarnings, setValidationWarnings] = useState<string[]>([])
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   useEffect(() => {
     try {
       const validation = validateWorkflow(workflow)
       setValidationErrors(validation.errors)
+      setValidationWarnings(validation.warnings)
 
       if (validation.valid) {
         const yaml = workflowToYAML(workflow)
@@ -34,6 +36,7 @@ export default function YAMLPreview() {
       console.error('Error generating YAML:', error)
       setYamlContent('# Error generating YAML\n# Please check the workflow configuration')
       setValidationErrors(['Failed to generate YAML'])
+      setValidationWarnings([])
     }
   }, [workflow])
 
@@ -75,6 +78,11 @@ export default function YAMLPreview() {
               YAML Preview
             </h3>
             <div className="flex items-center space-x-3">
+              {validationWarnings.length > 0 && (
+                <span className="text-xs text-yellow-600 font-medium">
+                  {validationWarnings.length} warning{validationWarnings.length !== 1 ? 's' : ''}
+                </span>
+              )}
               {validationErrors.length > 0 && (
                 <span className="text-xs text-red-600 font-medium">
                   {validationErrors.length} error{validationErrors.length !== 1 ? 's' : ''}
@@ -118,12 +126,28 @@ export default function YAMLPreview() {
           </div>
         </div>
 
+      {/* Validation Warnings */}
+      {validationWarnings.length > 0 && (
+        <div className="px-4 py-2 bg-yellow-50 border-b border-yellow-200">
+          <div className="space-y-1">
+            {validationWarnings.map((warning, index) => (
+              <div key={`warning-${index}`} className="text-xs text-yellow-700 flex items-start">
+                <svg className="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                <span>{warning}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Validation Errors */}
       {validationErrors.length > 0 && (
         <div className="px-4 py-2 bg-red-50 border-b border-red-200">
           <div className="space-y-1">
             {validationErrors.map((error, index) => (
-              <div key={index} className="text-xs text-red-700 flex items-start">
+              <div key={`error-${index}`} className="text-xs text-red-700 flex items-start">
                 <svg className="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
