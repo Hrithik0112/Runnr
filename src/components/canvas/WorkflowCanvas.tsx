@@ -1,6 +1,6 @@
 import { useDroppable } from '@dnd-kit/core'
 import { useWorkflowStore } from '../../stores/workflowStore'
-import JobCard from './JobCard'
+import JobNode from './JobNode'
 
 export default function WorkflowCanvas() {
   const { workflow, selectedNode, addJob, setSelectedNode } = useWorkflowStore()
@@ -12,6 +12,10 @@ export default function WorkflowCanvas() {
 
   const handleJobClick = (jobId: string) => {
     setSelectedNode({ type: 'job', jobId })
+  }
+
+  const handleStepClick = (jobId: string, stepId: string) => {
+    setSelectedNode({ type: 'step', jobId, stepId })
   }
 
   return (
@@ -57,13 +61,15 @@ export default function WorkflowCanvas() {
       ) : (
         <div className="space-y-4">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">Jobs</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {jobs.map((job) => (
-              <JobCard
+              <JobNode
                 key={job.id}
                 job={job}
                 onClick={() => handleJobClick(job.id)}
+                onStepClick={(stepId) => handleStepClick(job.id, stepId)}
                 isSelected={selectedNode.type === 'job' && selectedNode.jobId === job.id}
+                selectedStepId={selectedNode.type === 'step' && selectedNode.jobId === job.id ? selectedNode.stepId : undefined}
               />
             ))}
           </div>
