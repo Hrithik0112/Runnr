@@ -6,9 +6,10 @@ interface AppLayoutProps {
   sidebar: ReactNode
   canvas: ReactNode
   inspector: ReactNode
+  yamlPreview?: ReactNode
 }
 
-export default function AppLayout({ sidebar, canvas, inspector }: AppLayoutProps) {
+export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: AppLayoutProps) {
   const addJob = useWorkflowStore((state) => state.addJob)
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -52,21 +53,30 @@ export default function AppLayout({ sidebar, canvas, inspector }: AppLayoutProps
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Sidebar */}
-          <div className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
-            {sidebar}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 flex overflow-hidden">
+            {/* Sidebar */}
+            <div className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
+              {sidebar}
+            </div>
+
+            {/* Canvas Area */}
+            <div className="flex-1 overflow-hidden bg-gray-50">
+              {canvas}
+            </div>
+
+            {/* Inspector Panel */}
+            <div className="w-80 bg-white border-l border-gray-200 overflow-y-auto">
+              {inspector}
+            </div>
           </div>
 
-          {/* Canvas Area */}
-          <div className="flex-1 overflow-hidden bg-gray-50">
-            {canvas}
-          </div>
-
-          {/* Inspector Panel */}
-          <div className="w-80 bg-white border-l border-gray-200 overflow-y-auto">
-            {inspector}
-          </div>
+          {/* YAML Preview Panel */}
+          {yamlPreview && (
+            <div className="h-64 border-t border-gray-200 bg-white">
+              {yamlPreview}
+            </div>
+          )}
         </div>
       </div>
     </DndContext>
