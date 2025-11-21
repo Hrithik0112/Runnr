@@ -132,8 +132,8 @@ export default function WorkflowCanvas() {
           </div>
         </div>
       ) : (
-        <div ref={containerRef} className="space-y-4 relative">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">Jobs</h2>
+        <div ref={containerRef} className="space-y-4 relative p-4 sm:p-6 lg:p-8">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-700 mb-4">Jobs</h2>
           
           {/* SVG overlay for connections */}
           {connections.length > 0 && containerRef.current && (
@@ -163,7 +163,7 @@ export default function WorkflowCanvas() {
           )}
 
           {/* Job nodes */}
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {jobs.map((job) => (
               <div
                 key={job.id}
