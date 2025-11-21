@@ -38,6 +38,12 @@ export default function TopBar() {
       <div className="flex items-center">
         <h1 className="text-xl font-bold text-gray-900">Runnr</h1>
         <span className="ml-2 text-sm text-gray-500">Visual CI/CD Pipeline Builder</span>
+        <span className="ml-4 text-xs text-gray-400 flex items-center">
+          <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+          Auto-saved
+        </span>
       </div>
       
       <div className="flex items-center space-x-2">
