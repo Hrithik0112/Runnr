@@ -1,0 +1,57 @@
+import { useDraggable } from '@dnd-kit/core'
+import { CSS } from '@dnd-kit/utilities'
+
+interface ComponentItemProps {
+  id: string
+  name: string
+  description: string
+  icon: React.ReactNode
+}
+
+export default function ComponentItem({ id, name, description, icon }: ComponentItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    isDragging,
+  } = useDraggable({
+    id,
+    data: {
+      type: id,
+      name,
+    },
+  })
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={`
+        p-3 bg-white rounded-lg border-2 border-gray-200 
+        cursor-grab active:cursor-grabbing
+        hover:border-blue-400 hover:shadow-md
+        transition-all duration-200
+        ${isDragging ? 'shadow-lg border-blue-500' : ''}
+      `}
+    >
+      <div className="flex items-start space-x-3">
+        <div className="flex-shrink-0 text-gray-600">
+          {icon}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-gray-900">{name}</p>
+          <p className="text-xs text-gray-500 mt-1">{description}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
