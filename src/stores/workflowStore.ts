@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import { Workflow, Job, Step, SelectedNode, TriggerConfig } from '../types/workflow';
+import { saveWorkflowToStorage, loadWorkflowFromStorage } from '../utils/storage';
+import { debounce } from '../utils/debounce';
 
 interface WorkflowState {
   workflow: Workflow;
@@ -23,6 +25,10 @@ interface WorkflowState {
   redo: () => void;
   canUndo: boolean;
   canRedo: boolean;
+  
+  // Persistence actions
+  loadWorkflow: () => void;
+  saveWorkflow: () => void;
 }
 
 const createEmptyWorkflow = (): Workflow => ({
@@ -35,10 +41,18 @@ const createEmptyWorkflow = (): Workflow => ({
   jobs: {}
 });
 
+// Initialize workflow from localStorage or use empty
+const initializeWorkflow = (): Workflow => {
+  const saved = loadWorkflowFromStorage()
+  return saved || createEmptyWorkflow()
+}
+
+const initialWorkflow = initializeWorkflow()
+
 export const useWorkflowStore = create<WorkflowState>((set, get) => ({
-  workflow: createEmptyWorkflow(),
+  workflow: initialWorkflow,
   selectedNode: { type: null },
-  history: [createEmptyWorkflow()],
+  history: [initialWorkflow],
   historyIndex: 0,
   canUndo: false,
   canRedo: false,
@@ -222,6 +236,38 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
         canRedo: newIndex < history.length - 1
       });
     }
+  },
+
+  loadWorkflow: () => {
+    const saved = loadWorkflowFromStorage()
+    if (saved) {
+      const emptyHistory = [saved]
+      set({
+        workflow: saved,
+        history: emptyHistory,
+        historyIndex: 0,
+        canUndo: false,
+        canRedo: false
+      })
+    }
+  },
+
+  saveWorkflow: () => {
+    const workflow = get().workflow
+    saveWorkflowToStorage(workflow)
   }
 }));
+
+// Auto-save on workflow changes (debounced)
+const debouncedSave = debounce(() => {
+  useWorkflowStore.getState().saveWorkflow()
+}, 1000) // Save 1 second after last change
+
+// Subscribe to workflow changes for auto-save
+useWorkflowStore.subscribe(
+  (state) => state.workflow,
+  () => {
+    debouncedSave()
+  }
+)
 
