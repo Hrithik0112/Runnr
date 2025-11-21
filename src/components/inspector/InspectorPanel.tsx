@@ -2,6 +2,7 @@ import { useWorkflowStore } from '../../stores/workflowStore'
 import JobInspector from './JobInspector'
 import StepInspector from './StepInspector'
 import StepEditor from './StepEditor'
+import TriggerEditor from './TriggerEditor'
 
 export default function InspectorPanel() {
   const selectedNode = useWorkflowStore((state) => state.selectedNode)
@@ -25,9 +26,7 @@ export default function InspectorPanel() {
         ) : selectedNode.type === 'step' && selectedNode.jobId && selectedNode.stepId ? (
           <StepInspector jobId={selectedNode.jobId} stepId={selectedNode.stepId} />
         ) : selectedNode.type === 'trigger' ? (
-          <div className="p-4 text-center py-8">
-            <p className="text-sm text-gray-500">Trigger editor coming soon</p>
-          </div>
+          <TriggerEditor />
         ) : (
           <div className="p-4 text-center py-8">
             <svg

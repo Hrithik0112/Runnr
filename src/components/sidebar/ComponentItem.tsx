@@ -6,22 +6,28 @@ interface ComponentItemProps {
   name: string
   description: string
   icon: React.ReactNode
+  onClick?: () => void
 }
 
-export default function ComponentItem({ id, name, description, icon }: ComponentItemProps) {
+export default function ComponentItem({ id, name, description, icon, onClick }: ComponentItemProps) {
+  // If onClick is provided, don't make it draggable (e.g., trigger)
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     isDragging,
-  } = useDraggable({
-    id,
-    data: {
-      type: id,
-      name,
-    },
-  })
+  } = useDraggable(
+    onClick 
+      ? { id: `no-drag-${id}`, data: {} }
+      : {
+          id,
+          data: {
+            type: id,
+            name,
+          },
+        }
+  )
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -32,11 +38,12 @@ export default function ComponentItem({ id, name, description, icon }: Component
     <div
       ref={setNodeRef}
       style={style}
-      {...listeners}
+      {...(onClick ? {} : listeners)}
       {...attributes}
+      onClick={onClick}
       className={`
         p-3 bg-white rounded-lg border-2 border-gray-200 
-        cursor-grab active:cursor-grabbing
+        ${onClick ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'}
         hover:border-blue-400 hover:shadow-md
         transition-all duration-200
         ${isDragging ? 'shadow-lg border-blue-500' : ''}
