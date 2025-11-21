@@ -1,3 +1,4 @@
+import { ErrorBoundary } from './components/common/ErrorBoundary'
 import AppLayout from './components/layout/AppLayout'
 import Sidebar from './components/sidebar/Sidebar'
 import WorkflowCanvas from './components/canvas/WorkflowCanvas'
@@ -6,12 +7,14 @@ import YAMLPreview from './components/yaml/YAMLPreview'
 
 function App() {
   return (
-    <AppLayout
-      sidebar={<Sidebar />}
-      canvas={<WorkflowCanvas />}
-      inspector={<InspectorPanel />}
-      yamlPreview={<YAMLPreview />}
-    />
+    <ErrorBoundary>
+      <AppLayout
+        sidebar={<Sidebar />}
+        canvas={<WorkflowCanvas />}
+        inspector={<InspectorPanel />}
+        yamlPreview={<YAMLPreview />}
+      />
+    </ErrorBoundary>
   )
 }
 
