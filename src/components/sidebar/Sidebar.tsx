@@ -1,6 +1,13 @@
 import ComponentItem from './ComponentItem'
+import { useWorkflowStore } from '../../stores/workflowStore'
 
 export default function Sidebar() {
+  const setSelectedNode = useWorkflowStore((state) => state.setSelectedNode)
+
+  const handleTriggerClick = () => {
+    setSelectedNode({ type: 'trigger' })
+  }
+
   return (
     <div className="p-4">
       <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">
@@ -31,6 +38,7 @@ export default function Sidebar() {
           id="trigger"
           name="Trigger"
           description="Event that starts the workflow"
+          onClick={handleTriggerClick}
           icon={
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />

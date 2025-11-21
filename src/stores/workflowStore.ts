@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Workflow, Job, Step, SelectedNode } from '../types/workflow';
+import { Workflow, Job, Step, SelectedNode, TriggerConfig } from '../types/workflow';
 
 interface WorkflowState {
   workflow: Workflow;
@@ -15,6 +15,7 @@ interface WorkflowState {
   addStep: (jobId: string, step: Step) => void;
   updateStep: (jobId: string, stepId: string, updates: Partial<Step>) => void;
   deleteStep: (jobId: string, stepId: string) => void;
+  updateTrigger: (trigger: TriggerConfig) => void;
   setSelectedNode: (node: SelectedNode) => void;
   
   // History actions (for undo/redo - will be implemented later)
@@ -170,6 +171,15 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
     if (get().selectedNode.jobId === jobId && get().selectedNode.stepId === stepId) {
       set({ selectedNode: { type: null } });
     }
+  },
+
+  updateTrigger: (trigger) => {
+    const currentWorkflow = get().workflow;
+    const updatedWorkflow: Workflow = {
+      ...currentWorkflow,
+      on: trigger
+    };
+    get().setWorkflow(updatedWorkflow);
   },
 
   setSelectedNode: (node) => {
