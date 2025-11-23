@@ -18,6 +18,7 @@ interface WorkflowState {
   updateStep: (jobId: string, stepId: string, updates: Partial<Step>) => void;
   deleteStep: (jobId: string, stepId: string) => void;
   updateTrigger: (trigger: TriggerConfig) => void;
+  updateWorkflowName: (name: string) => void;
   setSelectedNode: (node: SelectedNode) => void;
   
   // History actions
@@ -204,6 +205,15 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
     const updatedWorkflow: Workflow = {
       ...currentWorkflow,
       on: trigger
+    };
+    get().setWorkflow(updatedWorkflow);
+  },
+
+  updateWorkflowName: (name) => {
+    const currentWorkflow = get().workflow;
+    const updatedWorkflow: Workflow = {
+      ...currentWorkflow,
+      name: name
     };
     get().setWorkflow(updatedWorkflow);
   },
