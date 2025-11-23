@@ -31,7 +31,8 @@ export default function ComponentItem({ id, name, description, icon, onClick }: 
 
   const style = {
     transform: CSS.Translate.toString(transform),
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.3 : 1,
+    transition: isDragging ? 'none' : 'opacity 0.2s ease',
   }
 
   return (
@@ -45,8 +46,8 @@ export default function ComponentItem({ id, name, description, icon, onClick }: 
         p-3 bg-white rounded-lg border-2 border-gray-200 
         ${onClick ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'}
         hover:border-blue-400 hover:shadow-md
-        transition-all duration-200
-        ${isDragging ? 'shadow-lg border-blue-500' : ''}
+        transition-all duration-200 ease-out
+        ${isDragging ? 'shadow-lg border-blue-500 scale-95 opacity-30' : ''}
       `}
     >
       <div className="flex items-start space-x-3">

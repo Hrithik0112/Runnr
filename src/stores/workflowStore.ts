@@ -254,20 +254,25 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
 
   saveWorkflow: () => {
     const workflow = get().workflow
-    saveWorkflowToStorage(workflow)
+    return saveWorkflowToStorage(workflow)
   }
 }));
 
 // Auto-save on workflow changes (debounced)
 const debouncedSave = debounce(() => {
   useWorkflowStore.getState().saveWorkflow()
+  // Dispatch custom event for UI feedback
+  window.dispatchEvent(new CustomEvent('workflow-saved'))
 }, 1000) // Save 1 second after last change
 
 // Subscribe to workflow changes for auto-save
-useWorkflowStore.subscribe(
-  (state) => state.workflow,
-  () => {
+let previousWorkflow: Workflow | null = null
+useWorkflowStore.subscribe((state) => {
+  const currentWorkflow = state.workflow
+  // Only save if workflow actually changed
+  if (previousWorkflow !== currentWorkflow) {
+    previousWorkflow = currentWorkflow
     debouncedSave()
   }
-)
+})
 
