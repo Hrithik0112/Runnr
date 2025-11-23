@@ -1,7 +1,8 @@
 import { ReactNode, useState } from 'react'
-import { DndContext, DragEndEvent } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, DragStartEvent, DragOverlay } from '@dnd-kit/core'
 import { useWorkflowStore } from '../../stores/workflowStore'
 import TopBar from './TopBar'
+import ComponentItem from '../sidebar/ComponentItem'
 
 interface AppLayoutProps {
   sidebar: ReactNode
@@ -13,12 +14,14 @@ interface AppLayoutProps {
 export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: AppLayoutProps) {
   const addJob = useWorkflowStore((state) => state.addJob)
   const [showMobileInspector, setShowMobileInspector] = useState(false)
+  const [activeId, setActiveId] = useState<string | null>(null)
 
-  const handleDragStart = () => {
-    // Visual feedback handled by dnd-kit
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string)
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
+    setActiveId(null)
     const { active, over } = event
 
     // Only handle drops on the canvas
@@ -43,6 +46,53 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
       // Triggers will be handled in the inspector (in future step)
       console.log('Trigger dropped - will be handled in inspector')
     }
+  }
+
+  // Get component data for drag overlay
+  const getDragOverlayContent = () => {
+    if (!activeId) return null
+
+    const components: Record<string, { name: string; description: string; icon: ReactNode }> = {
+      job: {
+        name: 'Job',
+        description: 'A unit of work that runs on a runner',
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+        )
+      },
+      step: {
+        name: 'Step',
+        description: 'A single task within a job',
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        )
+      },
+      trigger: {
+        name: 'Trigger',
+        description: 'Event that starts the workflow',
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        )
+      }
+    }
+
+    const component = components[activeId]
+    if (!component) return null
+
+    return (
+      <ComponentItem
+        id={activeId}
+        name={component.name}
+        description={component.description}
+        icon={component.icon}
+      />
+    )
   }
 
   return (
@@ -119,6 +169,25 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
           )}
         </div>
       </div>
+      
+      {/* Drag Overlay - Shows dragged item above everything */}
+      <DragOverlay
+        style={{
+          cursor: 'grabbing',
+        }}
+        className="z-[9999]"
+      >
+        {activeId && (
+          <div 
+            className="transform rotate-2 scale-105 shadow-2xl transition-transform duration-150"
+            style={{
+              filter: 'drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2))',
+            }}
+          >
+            {getDragOverlayContent()}
+          </div>
+        )}
+      </DragOverlay>
     </DndContext>
   )
 }

@@ -1,4 +1,4 @@
-import { Workflow } from '../types/workflow'
+import { Workflow, TriggerConfig } from '../types/workflow'
 
 export interface Template {
   id: string
@@ -23,7 +23,7 @@ export const templates: Template[] = [
         pull_request: {
           branches: ['main']
         }
-      },
+      } as TriggerConfig,
       jobs: {
         build: {
           id: 'build',
@@ -71,7 +71,7 @@ export const templates: Template[] = [
         pull_request: {
           branches: ['main']
         }
-      },
+      } as TriggerConfig,
       jobs: {
         test: {
           id: 'test',
