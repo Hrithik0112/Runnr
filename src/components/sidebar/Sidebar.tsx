@@ -5,10 +5,45 @@ import { useWorkflowStore } from '../../stores/workflowStore'
 
 export default function Sidebar() {
   const setSelectedNode = useWorkflowStore((state) => state.setSelectedNode)
+  const addStep = useWorkflowStore((state) => state.addStep)
+  const workflow = useWorkflowStore((state) => state.workflow)
+  const selectedNode = useWorkflowStore((state) => state.selectedNode)
   const [activeTab, setActiveTab] = useState<'components' | 'templates'>('components')
 
   const handleTriggerClick = () => {
     setSelectedNode({ type: 'trigger' })
+  }
+
+  const handleStepClick = () => {
+    // If a job is selected, add step to that job
+    if (selectedNode.type === 'job' && selectedNode.jobId) {
+      const jobId = selectedNode.jobId
+      const job = workflow.jobs[jobId]
+      if (job) {
+        const stepId = `step_${Date.now()}`
+        addStep(jobId, {
+          id: stepId,
+          name: 'New Step',
+          run: 'echo "Hello World"'
+        })
+        // Select the newly added step
+        setSelectedNode({ type: 'step', jobId, stepId })
+      }
+    } else {
+      // If no job is selected, show a message or select first job
+      const jobs = Object.values(workflow.jobs)
+      if (jobs.length > 0) {
+        // Select the first job and add step to it
+        const firstJob = jobs[0]
+        const stepId = `step_${Date.now()}`
+        addStep(firstJob.id, {
+          id: stepId,
+          name: 'New Step',
+          run: 'echo "Hello World"'
+        })
+        setSelectedNode({ type: 'step', jobId: firstJob.id, stepId })
+      }
+    }
   }
 
   return (
@@ -63,6 +98,7 @@ export default function Sidebar() {
                 id="step"
                 name="Step"
                 description="A single task within a job"
+                onClick={handleStepClick}
                 icon={
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

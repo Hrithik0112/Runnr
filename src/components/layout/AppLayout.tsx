@@ -13,9 +13,11 @@ interface AppLayoutProps {
 
 export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: AppLayoutProps) {
   const addJob = useWorkflowStore((state) => state.addJob)
+  const addStep = useWorkflowStore((state) => state.addStep)
+  const workflow = useWorkflowStore((state) => state.workflow)
   const [showMobileInspector, setShowMobileInspector] = useState(false)
   const [showYAMLPreview, setShowYAMLPreview] = useState(true)
-  const [rightPanelMode, setRightPanelMode] = useState<'inspector' | 'yaml' | 'split'>('split')
+  const [rightPanelMode, setRightPanelMode] = useState<'inspector' | 'yaml' | 'split'>('inspector')
   const [activeId, setActiveId] = useState<string | null>(null)
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -26,14 +28,26 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
     setActiveId(null)
     const { active, over } = event
 
-    // Only handle drops on the canvas
-    if (!over || over.id !== 'canvas-drop-zone') {
+    if (!over) return
+
+    // Handle step drops on jobs
+    if (active.id === 'step' && typeof over.id === 'string' && over.id.startsWith('job-drop-')) {
+      const jobId = over.id.replace('job-drop-', '')
+      const job = workflow.jobs[jobId]
+      if (job) {
+        // Create a new step
+        const stepId = `step_${Date.now()}`
+        addStep(jobId, {
+          id: stepId,
+          name: 'New Step',
+          run: 'echo "Hello World"'
+        })
+      }
       return
     }
 
-    // Handle different component types
-    if (active.id === 'job') {
-      // Create a new job
+    // Handle job drops on canvas
+    if (active.id === 'job' && over.id === 'canvas-drop-zone') {
       const jobId = `job_${Date.now()}`
       addJob({
         id: jobId,
@@ -41,12 +55,13 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
         'runs-on': 'ubuntu-latest',
         steps: [],
       })
-    } else if (active.id === 'step') {
-      // Steps will be handled when dropping on a job (in future step)
-      console.log('Step dropped - will be handled when dropping on a job')
-    } else if (active.id === 'trigger') {
-      // Triggers will be handled in the inspector (in future step)
-      console.log('Trigger dropped - will be handled in inspector')
+      return
+    }
+
+    // Handle trigger clicks (already handled via onClick in ComponentItem)
+    if (active.id === 'trigger') {
+      // Triggers are handled via onClick, not drag
+      return
     }
   }
 
