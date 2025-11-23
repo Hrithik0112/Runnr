@@ -114,7 +114,7 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="w-full h-full flex flex-col bg-gray-50">
+      <div className="w-full h-full flex flex-col bg-neutral-50">
         {/* Top Bar */}
         <TopBar />
 
@@ -122,27 +122,27 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
             {/* Sidebar */}
-            <div className="w-full lg:w-64 bg-white border-r border-gray-200 overflow-y-auto flex-shrink-0">
+            <div className="w-full lg:w-64 bg-white border-r border-neutral-200 overflow-y-auto flex-shrink-0 shadow-soft">
               {sidebar}
             </div>
 
             {/* Canvas Area */}
-            <div className="flex-1 overflow-hidden bg-gray-50 min-w-0">
+            <div className="flex-1 overflow-hidden bg-neutral-50 min-w-0">
               {canvas}
             </div>
 
             {/* Right Panel - Desktop (Inspector and/or YAML Preview) */}
-            <div className="hidden lg:flex w-96 bg-white border-l border-gray-200 flex-shrink-0 flex-col">
+            <div className="hidden lg:flex w-96 bg-white border-l border-neutral-200 flex-shrink-0 flex-col shadow-soft">
               {/* Panel Tabs */}
-              <div className="flex-shrink-0 border-b border-gray-200 bg-gray-50">
+              <div className="flex-shrink-0 border-b border-neutral-200 bg-neutral-50">
                 <div className="flex">
                   <button
                     onClick={() => setRightPanelMode('inspector')}
                     className={`
-                      flex-1 px-4 py-2 text-xs font-medium transition-colors
+                      flex-1 px-4 py-2.5 text-xs font-semibold transition-all duration-200
                       ${rightPanelMode === 'inspector' || rightPanelMode === 'split'
-                        ? 'bg-white text-blue-600 border-b-2 border-blue-600'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                        ? 'bg-white text-primary-600 border-b-2 border-primary-600'
+                        : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
                       }
                     `}
                   >
@@ -151,10 +151,10 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
                   <button
                     onClick={() => setRightPanelMode('yaml')}
                     className={`
-                      flex-1 px-4 py-2 text-xs font-medium transition-colors
+                      flex-1 px-4 py-2.5 text-xs font-semibold transition-all duration-200
                       ${rightPanelMode === 'yaml' || rightPanelMode === 'split'
-                        ? 'bg-white text-blue-600 border-b-2 border-blue-600'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                        ? 'bg-white text-primary-600 border-b-2 border-primary-600'
+                        : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
                       }
                     `}
                   >
@@ -163,10 +163,10 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
                   <button
                     onClick={() => setRightPanelMode('split')}
                     className={`
-                      px-3 py-2 text-xs font-medium transition-colors
+                      px-3 py-2.5 text-xs font-semibold transition-all duration-200
                       ${rightPanelMode === 'split'
-                        ? 'bg-white text-blue-600 border-b-2 border-blue-600'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                        ? 'bg-white text-primary-600 border-b-2 border-primary-600'
+                        : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
                       }
                     `}
                     title="Split view"
@@ -183,7 +183,7 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
                 {/* Inspector Panel */}
                 {(rightPanelMode === 'inspector' || rightPanelMode === 'split') && (
                   <div className={`
-                    ${rightPanelMode === 'split' ? 'h-1/2 border-b border-gray-200' : 'flex-1'}
+                    ${rightPanelMode === 'split' ? 'h-1/2 border-b border-neutral-200' : 'flex-1'}
                     overflow-y-auto
                   `}>
                     {inspector}
@@ -195,7 +195,7 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
                   <div className={`
                     ${rightPanelMode === 'split' ? 'h-1/2' : 'flex-1'}
                     overflow-hidden
-                    ${rightPanelMode === 'yaml' ? 'border-t border-gray-200' : ''}
+                    ${rightPanelMode === 'yaml' ? 'border-t border-neutral-200' : ''}
                   `}>
                     {yamlPreview}
                   </div>
@@ -237,7 +237,7 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
           {/* Mobile Inspector Toggle Button */}
           <button
             onClick={() => setShowMobileInspector(true)}
-            className="lg:hidden fixed bottom-4 right-4 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors z-30"
+            className="lg:hidden fixed bottom-4 right-4 p-3.5 bg-primary-600 text-white rounded-full shadow-large hover:bg-primary-700 transition-all duration-200 z-30"
             aria-label="Open inspector"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -270,7 +270,7 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
           {yamlPreview && !showYAMLPreview && (
             <button
               onClick={() => setShowYAMLPreview(true)}
-              className="lg:hidden fixed bottom-4 left-4 p-3 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-colors z-30"
+              className="lg:hidden fixed bottom-4 left-4 p-3.5 bg-success-600 text-white rounded-full shadow-large hover:bg-success-700 transition-all duration-200 z-30"
               aria-label="Open YAML preview"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

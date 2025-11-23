@@ -49,14 +49,14 @@ export default function Sidebar() {
   return (
     <div className="h-full flex flex-col">
       {/* Tabs */}
-      <div className="flex border-b border-gray-200 bg-white">
+      <div className="flex border-b border-neutral-200 bg-white">
         <button
           onClick={() => setActiveTab('components')}
           className={`
-            flex-1 px-4 py-3 text-sm font-medium transition-colors
+            flex-1 px-4 py-3 text-sm font-semibold transition-all duration-200
             ${activeTab === 'components'
-              ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
+              : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50'
             }
           `}
         >
@@ -65,10 +65,10 @@ export default function Sidebar() {
         <button
           onClick={() => setActiveTab('templates')}
           className={`
-            flex-1 px-4 py-3 text-sm font-medium transition-colors
+            flex-1 px-4 py-3 text-sm font-semibold transition-all duration-200
             ${activeTab === 'templates'
-              ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
+              : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50'
             }
           `}
         >
@@ -80,7 +80,7 @@ export default function Sidebar() {
       <div className="flex-1 overflow-y-auto">
         {activeTab === 'components' ? (
           <div className="p-4">
-            <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">
+            <h2 className="text-sm font-bold text-neutral-800 uppercase tracking-wider mb-4">
               Components
             </h2>
             <div className="space-y-3">
