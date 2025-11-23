@@ -84,29 +84,29 @@ export default function TriggerEditor() {
   return (
     <div className="p-4 space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Workflow Triggers</h3>
-        <p className="text-sm text-gray-500 mb-4">
+        <h3 className="text-lg font-semibold text-slate-900 mb-4">Workflow Triggers</h3>
+        <p className="text-sm text-slate-500 mb-4">
           Configure when this workflow should run
         </p>
       </div>
 
       {/* Push Trigger */}
-      <div className="border border-gray-200 rounded-lg p-4">
+      <div className="border border-slate-200 rounded-lg p-4">
         <label className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
               checked={enabledTriggers.has('push')}
               onChange={(e) => toggleTrigger('push', e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="rounded border-slate-300 text-slate-900 focus:ring-slate-700"
             />
-            <span className="text-sm font-medium text-gray-700">Push</span>
+            <span className="text-sm font-medium text-slate-700">Push</span>
           </div>
         </label>
         {enabledTriggers.has('push') && (
           <div className="mt-3 space-y-3 pl-6">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Branches
               </label>
               <input
@@ -117,31 +117,31 @@ export default function TriggerEditor() {
                   updatePushBranches(branches)
                 }}
                 placeholder="main, develop"
-                className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-700"
               />
-              <p className="mt-1 text-xs text-gray-400">Comma-separated branch names</p>
+              <p className="mt-1 text-xs text-slate-400">Comma-separated branch names</p>
             </div>
           </div>
         )}
       </div>
 
       {/* Pull Request Trigger */}
-      <div className="border border-gray-200 rounded-lg p-4">
+      <div className="border border-slate-200 rounded-lg p-4">
         <label className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
               checked={enabledTriggers.has('pull_request')}
               onChange={(e) => toggleTrigger('pull_request', e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="rounded border-slate-300 text-slate-900 focus:ring-slate-700"
             />
-            <span className="text-sm font-medium text-gray-700">Pull Request</span>
+            <span className="text-sm font-medium text-slate-700">Pull Request</span>
           </div>
         </label>
         {enabledTriggers.has('pull_request') && (
           <div className="mt-3 space-y-3 pl-6">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Branches
               </label>
               <input
@@ -152,25 +152,25 @@ export default function TriggerEditor() {
                   updatePullRequestBranches(branches)
                 }}
                 placeholder="main, develop"
-                className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-700"
               />
-              <p className="mt-1 text-xs text-gray-400">Comma-separated branch names (optional)</p>
+              <p className="mt-1 text-xs text-slate-400">Comma-separated branch names (optional)</p>
             </div>
           </div>
         )}
       </div>
 
       {/* Schedule Trigger */}
-      <div className="border border-gray-200 rounded-lg p-4">
+      <div className="border border-slate-200 rounded-lg p-4">
         <label className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
               checked={enabledTriggers.has('schedule')}
               onChange={(e) => toggleTrigger('schedule', e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="rounded border-slate-300 text-slate-900 focus:ring-slate-700"
             />
-            <span className="text-sm font-medium text-gray-700">Schedule (Cron)</span>
+            <span className="text-sm font-medium text-slate-700">Schedule (Cron)</span>
           </div>
         </label>
         {enabledTriggers.has('schedule') && (
@@ -182,7 +182,7 @@ export default function TriggerEditor() {
                   value={schedule.cron}
                   onChange={(e) => updateSchedule(e.target.value, index)}
                   placeholder="0 0 * * *"
-                  className="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                  className="flex-1 px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-700 font-mono"
                 />
                 {(workflow.on.schedule || []).length > 1 && (
                   <button
@@ -196,11 +196,11 @@ export default function TriggerEditor() {
             ))}
             <button
               onClick={addSchedule}
-              className="text-sm text-blue-600 hover:text-blue-700"
+              className="text-sm text-slate-900 hover:text-slate-800"
             >
               + Add Schedule
             </button>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-slate-400">
               Cron format: minute hour day month weekday (e.g., "0 0 * * *" = daily at midnight)
             </p>
           </div>
@@ -208,21 +208,21 @@ export default function TriggerEditor() {
       </div>
 
       {/* Workflow Dispatch Trigger */}
-      <div className="border border-gray-200 rounded-lg p-4">
+      <div className="border border-slate-200 rounded-lg p-4">
         <label className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
               checked={enabledTriggers.has('workflow_dispatch')}
               onChange={(e) => toggleTrigger('workflow_dispatch', e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="rounded border-slate-300 text-slate-900 focus:ring-slate-700"
             />
-            <span className="text-sm font-medium text-gray-700">Manual Trigger</span>
+            <span className="text-sm font-medium text-slate-700">Manual Trigger</span>
           </div>
         </label>
         {enabledTriggers.has('workflow_dispatch') && (
           <div className="mt-3 pl-6">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-slate-500">
               Allows manual triggering of the workflow from GitHub Actions UI
             </p>
           </div>

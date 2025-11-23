@@ -1,7 +1,9 @@
 import { useWorkflowStore } from '../../stores/workflowStore'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function TopBar() {
+  const navigate = useNavigate()
   const undo = useWorkflowStore((state) => state.undo)
   const redo = useWorkflowStore((state) => state.redo)
   const canUndo = useWorkflowStore((state) => state.canUndo)
@@ -61,30 +63,41 @@ export default function TopBar() {
   }, [])
 
   return (
-    <div className="h-14 bg-white border-b border-neutral-200 flex items-center justify-between px-4 sm:px-6 shadow-soft">
-      <div className="flex items-center min-w-0 flex-1">
+    <div className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 shadow-sm">
+      <div className="flex items-center min-w-0 flex-1 gap-4">
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors duration-200 group"
+          aria-label="Back to home"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span className="text-sm font-medium hidden sm:inline">Home</span>
+        </button>
+        <div className="h-6 w-px bg-slate-200"></div>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-medium">
-            <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-8 h-8 rounded-md bg-slate-900 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-black">
+          <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">
             Runnr
           </h1>
         </div>
-        <span className="hidden sm:inline ml-3 text-xs sm:text-sm text-neutral-600 font-medium">Visual CI/CD Pipeline Builder</span>
+        <span className="hidden sm:inline ml-3 text-xs sm:text-sm text-slate-600 font-medium">Visual CI/CD Pipeline Builder</span>
         <span className="hidden md:flex ml-6 text-xs items-center">
           {saveStatus === 'saving' && (
-            <span className="text-neutral-600 flex items-center gap-1.5 font-medium">
-              <svg className="w-3.5 h-3.5 animate-spin text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <span className="text-slate-600 flex items-center gap-1.5 font-medium">
+              <svg className="w-3.5 h-3.5 animate-spin text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
               Saving...
             </span>
           )}
           {saveStatus === 'saved' && (
-            <span className="text-success-600 flex items-center gap-1.5 font-medium animate-fade-in">
+            <span className="text-emerald-600 flex items-center gap-1.5 font-medium">
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
@@ -92,7 +105,7 @@ export default function TopBar() {
             </span>
           )}
           {saveStatus === 'idle' && (
-            <span className="text-neutral-400 flex items-center gap-1.5 font-medium">
+            <span className="text-slate-400 flex items-center gap-1.5 font-medium">
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
@@ -111,8 +124,8 @@ export default function TopBar() {
             flex items-center gap-1.5
             transition-all duration-200
             ${canUndo
-              ? 'text-neutral-700 bg-white border border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400 hover:shadow-soft'
-              : 'text-neutral-400 bg-neutral-50 border border-neutral-200 cursor-not-allowed'
+              ? 'text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 hover:border-slate-400'
+              : 'text-slate-400 bg-slate-50 border border-slate-200 cursor-not-allowed'
             }
           `}
           title="Undo (Cmd+Z)"
@@ -132,8 +145,8 @@ export default function TopBar() {
             flex items-center gap-1.5
             transition-all duration-200
             ${canRedo
-              ? 'text-neutral-700 bg-white border border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400 hover:shadow-soft'
-              : 'text-neutral-400 bg-neutral-50 border border-neutral-200 cursor-not-allowed'
+              ? 'text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 hover:border-slate-400'
+              : 'text-slate-400 bg-slate-50 border border-slate-200 cursor-not-allowed'
             }
           `}
           title="Redo (Cmd+Shift+Z)"

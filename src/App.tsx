@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route
-          path="/app"
+          path="/builder"
           element={
             <ErrorBoundary>
               <AppLayout

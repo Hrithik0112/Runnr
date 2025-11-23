@@ -13,7 +13,7 @@ export default function StepList({ steps, jobId, onStepClick, selectedStepId }: 
   }
 
   return (
-    <div className="mt-3 pt-3 border-t border-gray-100">
+    <div className="mt-3 pt-3 border-t border-slate-100">
       <div className="space-y-1">
         {steps.map((step, index) => {
           const isSelected = step.id === selectedStepId
@@ -30,21 +30,21 @@ export default function StepList({ steps, jobId, onStepClick, selectedStepId }: 
                 flex items-center space-x-2 px-2 py-1.5 rounded text-xs
                 cursor-pointer transition-colors
                 ${isSelected 
-                  ? 'bg-blue-50 text-blue-700' 
-                  : 'hover:bg-gray-50 text-gray-600'
+                  ? 'bg-slate-100 text-slate-900' 
+                  : 'hover:bg-slate-50 text-slate-600'
                 }
               `}
             >
               <div className={`
                 w-1.5 h-1.5 rounded-full
-                ${isSelected ? 'bg-blue-500' : 'bg-gray-400'}
+                ${isSelected ? 'bg-slate-1000' : 'bg-slate-400'}
               `} />
               <span className="truncate flex-1">{stepName}</span>
               {step.uses && (
-                <span className="text-gray-400">action</span>
+                <span className="text-slate-400">action</span>
               )}
               {step.run && (
-                <span className="text-gray-400">run</span>
+                <span className="text-slate-400">run</span>
               )}
             </div>
           )

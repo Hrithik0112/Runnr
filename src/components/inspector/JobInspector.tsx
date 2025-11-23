@@ -47,12 +47,12 @@ export default function JobInspector({ jobId }: JobInspectorProps) {
   return (
     <div className="p-4 space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Job Properties</h3>
+        <h3 className="text-lg font-semibold text-slate-900 mb-4">Job Properties</h3>
       </div>
 
       {/* Job Name */}
       <div>
-        <label htmlFor="job-name" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="job-name" className="block text-sm font-medium text-slate-700 mb-2">
           Job Name
         </label>
         <input
@@ -61,23 +61,23 @@ export default function JobInspector({ jobId }: JobInspectorProps) {
           value={job.name || ''}
           onChange={handleNameChange}
           placeholder="Enter job name"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-slate-500">
           Display name for this job
         </p>
       </div>
 
       {/* Runs On */}
       <div>
-        <label htmlFor="runs-on" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="runs-on" className="block text-sm font-medium text-slate-700 mb-2">
           Runner
         </label>
         <select
           id="runs-on"
           value={job['runs-on']}
           onChange={handleRunsOnChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700"
         >
           <option value="ubuntu-latest">Ubuntu Latest</option>
           <option value="ubuntu-22.04">Ubuntu 22.04</option>
@@ -88,7 +88,7 @@ export default function JobInspector({ jobId }: JobInspectorProps) {
           <option value="macos-13">macOS 13</option>
           <option value="macos-12">macOS 12</option>
         </select>
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-slate-500">
           The type of machine to run the job on
         </p>
       </div>
@@ -96,7 +96,7 @@ export default function JobInspector({ jobId }: JobInspectorProps) {
       {/* Dependencies (Needs) */}
       {availableJobs.length > 0 && (
         <div>
-          <label htmlFor="needs" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="needs" className="block text-sm font-medium text-slate-700 mb-2">
             Dependencies
           </label>
           <select
@@ -104,7 +104,7 @@ export default function JobInspector({ jobId }: JobInspectorProps) {
             multiple
             value={job.needs || []}
             onChange={handleNeedsChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px]"
+            className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700 min-h-[100px]"
             size={Math.min(availableJobs.length, 5)}
           >
             {availableJobs.map(({ id, name }) => (
@@ -113,7 +113,7 @@ export default function JobInspector({ jobId }: JobInspectorProps) {
               </option>
             ))}
           </select>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-slate-500">
             Hold Ctrl/Cmd to select multiple jobs. This job will wait for selected jobs to complete.
           </p>
         </div>
@@ -121,7 +121,7 @@ export default function JobInspector({ jobId }: JobInspectorProps) {
 
       {/* Conditional (If) */}
       <div>
-        <label htmlFor="job-if" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="job-if" className="block text-sm font-medium text-slate-700 mb-2">
           Condition (if)
         </label>
         <input
@@ -130,23 +130,23 @@ export default function JobInspector({ jobId }: JobInspectorProps) {
           value={job.if || ''}
           onChange={handleIfChange}
           placeholder="github.ref == 'refs/heads/main'"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+          className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700 font-mono text-sm"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-slate-500">
           Optional condition expression. Job runs only if condition is true.
         </p>
       </div>
 
       {/* Job Info */}
-      <div className="pt-4 border-t border-gray-200">
+      <div className="pt-4 border-t border-slate-200">
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-500">Job ID:</span>
-            <span className="font-mono text-gray-900">{job.id}</span>
+            <span className="text-slate-500">Job ID:</span>
+            <span className="font-mono text-slate-900">{job.id}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-500">Steps:</span>
-            <span className="text-gray-900">{job.steps.length}</span>
+            <span className="text-slate-500">Steps:</span>
+            <span className="text-slate-900">{job.steps.length}</span>
           </div>
         </div>
       </div>

@@ -44,20 +44,20 @@ export default function ComponentItem({ id, name, description, icon, onClick }: 
       {...attributes}
       onClick={onClick}
       className={`
-        p-3 bg-white rounded-lg border-2 border-gray-200 
+        p-3 bg-white rounded-lg border-2 border-slate-200 
         ${isTrigger ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'}
-        hover:border-blue-400 hover:shadow-md
+        hover:border-slate-400 hover:shadow-md
         transition-all duration-200 ease-out
-        ${isDragging ? 'shadow-lg border-blue-500 scale-95 opacity-30' : ''}
+        ${isDragging ? 'shadow-lg border-slate-500 scale-95 opacity-30' : ''}
       `}
     >
       <div className="flex items-start space-x-3">
-        <div className="flex-shrink-0 text-gray-600">
+        <div className="flex-shrink-0 text-slate-600">
           {icon}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900">{name}</p>
-          <p className="text-xs text-gray-500 mt-1">{description}</p>
+          <p className="text-sm font-medium text-slate-900">{name}</p>
+          <p className="text-xs text-slate-500 mt-1">{description}</p>
         </div>
       </div>
     </div>
