@@ -26,10 +26,10 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
         relative p-5 bg-white rounded-xl border-2 shadow-md cursor-pointer
         transition-all duration-200 transform
         ${isSelected 
-          ? 'border-blue-500 shadow-lg ring-2 ring-blue-200 scale-105' 
-          : 'border-gray-200 hover:border-blue-300 hover:shadow-lg hover:scale-102'
+          ? 'border-slate-700 shadow-lg ring-2 ring-slate-200 scale-105' 
+          : 'border-slate-200 hover:border-slate-400 hover:shadow-lg hover:scale-102'
         }
-        ${isOver ? 'border-green-400 bg-green-50 ring-2 ring-green-200' : ''}
+        ${isOver ? 'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-200' : ''}
       `}
     >
       {/* Header */}
@@ -37,10 +37,10 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
         <div className="flex items-center space-x-2 flex-1">
           <div className={`
             p-2 rounded-lg
-            ${isSelected ? 'bg-blue-100' : 'bg-gray-100'}
+            ${isSelected ? 'bg-slate-100' : 'bg-slate-100'}
           `}>
             <svg 
-              className={`w-5 h-5 ${isSelected ? 'text-blue-600' : 'text-gray-600'}`} 
+              className={`w-5 h-5 ${isSelected ? 'text-slate-700' : 'text-slate-600'}`} 
               fill="none" 
               viewBox="0 0 24 24" 
               stroke="currentColor"
@@ -49,14 +49,14 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
             </svg>
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-base font-semibold text-gray-900 truncate">
+            <h3 className="text-base font-semibold text-slate-900 truncate">
               {jobName}
             </h3>
           </div>
         </div>
         {isSelected && (
           <div className="ml-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <div className="w-2 h-2 bg-slate-700 rounded-full"></div>
           </div>
         )}
       </div>
@@ -64,8 +64,8 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
       {/* Details */}
       <div className="space-y-2">
         {/* Runner */}
-        <div className="flex items-center text-sm text-gray-600">
-          <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="flex items-center text-sm text-slate-600">
+          <svg className="w-4 h-4 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
           </svg>
           <span className="font-medium">{job['runs-on']}</span>
@@ -73,8 +73,8 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
 
         {/* Steps count */}
         {hasSteps && (
-          <div className="flex items-center text-sm text-gray-600">
-            <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="flex items-center text-sm text-slate-600">
+            <svg className="w-4 h-4 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
             <span>{job.steps.length} step{job.steps.length !== 1 ? 's' : ''}</span>
@@ -83,8 +83,8 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
 
         {/* Dependencies */}
         {hasDependencies && (
-          <div className="flex items-center text-sm text-gray-600">
-            <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="flex items-center text-sm text-slate-600">
+            <svg className="w-4 h-4 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
             <span>Depends on {job.needs!.length} job{job.needs!.length !== 1 ? 's' : ''}</span>
@@ -93,8 +93,8 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
 
         {/* Condition */}
         {job.if && (
-          <div className="flex items-center text-sm text-gray-600">
-            <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="flex items-center text-sm text-slate-600">
+            <svg className="w-4 h-4 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <span className="truncate">Conditional</span>
@@ -112,8 +112,8 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
 
       {/* Empty state indicator */}
       {!hasSteps && (
-        <div className="mt-3 pt-3 border-t border-gray-100">
-          <p className="text-xs text-gray-400 italic">
+        <div className="mt-3 pt-3 border-t border-slate-100">
+          <p className="text-xs text-slate-400 italic">
             {isOver ? 'Drop step here' : 'No steps yet'}
           </p>
         </div>
@@ -121,8 +121,8 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
       
       {/* Drop indicator when dragging step over */}
       {isOver && (
-        <div className="absolute inset-0 border-2 border-dashed border-green-400 rounded-xl bg-green-50 bg-opacity-50 flex items-center justify-center pointer-events-none z-10">
-          <div className="text-sm font-medium text-green-700 bg-white px-3 py-1 rounded-md shadow-sm">
+        <div className="absolute inset-0 border-2 border-dashed border-emerald-500 rounded-xl bg-emerald-50 bg-opacity-50 flex items-center justify-center pointer-events-none z-10">
+          <div className="text-sm font-medium text-emerald-700 bg-white px-3 py-1 rounded-md shadow-sm">
             Drop to add step
           </div>
         </div>

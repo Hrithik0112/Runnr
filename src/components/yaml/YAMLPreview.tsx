@@ -88,11 +88,11 @@ export default function YAMLPreview() {
     <>
       <div className="h-full flex flex-col bg-white">
         {/* Header */}
-        <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 flex-shrink-0">
+        <div className="px-4 py-2.5 border-b border-slate-200 bg-slate-50 flex-shrink-0">
           <div className="flex flex-col gap-2">
             {/* Row 1: Title and Status Badges */}
             <div className="flex items-center gap-2.5 flex-wrap">
-              <h3 className="text-sm font-semibold text-gray-900 whitespace-nowrap">
+              <h3 className="text-sm font-semibold text-slate-900 whitespace-nowrap">
                 YAML Preview
               </h3>
               {isValid && !hasWarnings && (
@@ -127,9 +127,9 @@ export default function YAMLPreview() {
                 onClick={handleCopy}
                 disabled={isEmpty}
                 className="
-                  px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-md
-                  hover:bg-gray-50 hover:border-gray-400 hover:text-gray-900
-                  disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300
+                  px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-md
+                  hover:bg-slate-50 hover:border-slate-400 hover:text-slate-900
+                  disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-slate-300
                   transition-all duration-150 flex items-center gap-1.5 shadow-sm
                   active:scale-[0.98]
                 "
@@ -144,9 +144,9 @@ export default function YAMLPreview() {
                 onClick={handleDownload}
                 disabled={isEmpty}
                 className="
-                  px-3 py-1.5 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded-md
-                  hover:bg-blue-700 hover:border-blue-700 hover:shadow-md
-                  disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-600 disabled:hover:border-blue-600
+                  px-3 py-1.5 text-xs font-medium text-white bg-slate-900 border border-slate-900 rounded-md
+                  hover:bg-slate-800 hover:border-slate-800 hover:shadow-md
+                  disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-900 disabled:hover:border-slate-900
                   transition-all duration-150 flex items-center gap-1.5 shadow-sm
                   active:scale-[0.98]
                 "
@@ -163,7 +163,7 @@ export default function YAMLPreview() {
 
         {/* Validation Messages - Collapsible */}
         {(hasErrors || hasWarnings) && (
-          <div className="flex-shrink-0 border-b border-gray-200">
+          <div className="flex-shrink-0 border-b border-slate-200">
             {hasErrors && (
               <div className="px-4 py-2.5 bg-red-50 border-b border-red-100">
                 <details className="group">
@@ -218,13 +218,13 @@ export default function YAMLPreview() {
         {/* Editor */}
         <div className="flex-1 overflow-hidden relative">
           {isEmpty ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
               <div className="text-center px-4">
-                <svg className="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="mx-auto h-12 w-12 text-slate-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p className="text-sm font-medium text-gray-700 mb-1">No workflow yet</p>
-                <p className="text-xs text-gray-500">Add jobs to see your YAML here</p>
+                <p className="text-sm font-medium text-slate-700 mb-1">No workflow yet</p>
+                <p className="text-xs text-slate-500">Add jobs to see your YAML here</p>
               </div>
             </div>
           ) : (

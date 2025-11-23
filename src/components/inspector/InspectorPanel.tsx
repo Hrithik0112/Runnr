@@ -10,8 +10,8 @@ export default function InspectorPanel() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+      <div className="p-4 border-b border-slate-200">
+        <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wider">
           Properties
         </h2>
       </div>
@@ -20,7 +20,7 @@ export default function InspectorPanel() {
         {selectedNode.type === 'job' && selectedNode.jobId ? (
           <div>
             <JobInspector jobId={selectedNode.jobId} />
-            <div className="border-t border-gray-200 mt-4">
+            <div className="border-t border-slate-200 mt-4">
               <StepEditor jobId={selectedNode.jobId} />
             </div>
           </div>

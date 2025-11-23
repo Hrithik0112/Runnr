@@ -96,7 +96,7 @@ export default function WorkflowCanvas() {
       ref={setNodeRef}
       className={`
         w-full h-full p-8 overflow-auto
-        ${isOver ? 'bg-primary-50' : 'bg-neutral-50'}
+        ${isOver ? 'bg-slate-100' : 'bg-slate-50'}
         transition-colors duration-200
       `}
     >
@@ -105,7 +105,7 @@ export default function WorkflowCanvas() {
           <div className="text-center">
             <div className="mb-4">
               <svg
-                className={`mx-auto h-16 w-16 ${isOver ? 'text-primary-400' : 'text-neutral-400'}`}
+                className={`mx-auto h-16 w-16 ${isOver ? 'text-slate-500' : 'text-slate-400'}`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -118,14 +118,14 @@ export default function WorkflowCanvas() {
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-neutral-800 mb-2">
+            <h2 className="text-2xl font-bold text-slate-800 mb-2">
               Workflow Canvas
             </h2>
-            <p className="text-neutral-600 mb-4 font-medium">
+            <p className="text-slate-600 mb-4 font-medium">
               Drag components from the sidebar to start building your CI/CD pipeline
             </p>
             {isOver && (
-              <div className="text-sm text-primary-600 font-semibold">
+              <div className="text-sm text-slate-700 font-semibold">
                 Drop here to add a job
               </div>
             )}
@@ -133,7 +133,7 @@ export default function WorkflowCanvas() {
         </div>
       ) : (
         <div ref={containerRef} className="space-y-4 relative p-4 sm:p-6 lg:p-8">
-          <h2 className="text-base sm:text-lg font-bold text-neutral-800 mb-4">Jobs</h2>
+          <h2 className="text-base sm:text-lg font-bold text-slate-800 mb-4">Jobs</h2>
           
           {/* SVG overlay for connections */}
           {connections.length > 0 && containerRef.current && (
@@ -181,7 +181,7 @@ export default function WorkflowCanvas() {
           </div>
           
           {isOver && (
-            <div className="mt-4 p-4 border-2 border-dashed border-primary-400 rounded-lg bg-primary-50 text-center text-primary-600 font-semibold relative z-10">
+            <div className="mt-4 p-4 border-2 border-dashed border-slate-400 rounded-lg bg-slate-100 text-center text-slate-700 font-semibold relative z-10">
               Drop here to add a new job
             </div>
           )}

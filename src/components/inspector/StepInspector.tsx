@@ -58,7 +58,7 @@ export default function StepInspector({ jobId, stepId }: StepInspectorProps) {
   return (
     <div className="p-4 space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">Step Properties</h3>
+        <h3 className="text-lg font-semibold text-slate-900">Step Properties</h3>
         <button
           onClick={handleDelete}
           className="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors"
@@ -69,7 +69,7 @@ export default function StepInspector({ jobId, stepId }: StepInspectorProps) {
 
       {/* Step Name */}
       <div>
-        <label htmlFor="step-name" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="step-name" className="block text-sm font-medium text-slate-700 mb-2">
           Step Name
         </label>
         <input
@@ -78,16 +78,16 @@ export default function StepInspector({ jobId, stepId }: StepInspectorProps) {
           value={step.name || ''}
           onChange={handleNameChange}
           placeholder="Optional step name"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-slate-500">
           Optional display name for this step
         </p>
       </div>
 
       {/* Uses (Action) */}
       <div>
-        <label htmlFor="step-uses" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="step-uses" className="block text-sm font-medium text-slate-700 mb-2">
           Action (uses)
         </label>
         <input
@@ -96,16 +96,16 @@ export default function StepInspector({ jobId, stepId }: StepInspectorProps) {
           value={step.uses || ''}
           onChange={handleUsesChange}
           placeholder="actions/checkout@v4"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+          className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700 font-mono text-sm"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-slate-500">
           GitHub Action to use (e.g., actions/checkout@v4). Leave empty to use run command instead.
         </p>
       </div>
 
       {/* Run (Command) */}
       <div>
-        <label htmlFor="step-run" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="step-run" className="block text-sm font-medium text-slate-700 mb-2">
           Run Command
         </label>
         <textarea
@@ -114,16 +114,16 @@ export default function StepInspector({ jobId, stepId }: StepInspectorProps) {
           onChange={handleRunChange}
           placeholder="npm install"
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+          className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700 font-mono text-sm"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-slate-500">
           Shell command to run. Leave empty if using an action.
         </p>
       </div>
 
       {/* Condition (If) */}
       <div>
-        <label htmlFor="step-if" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="step-if" className="block text-sm font-medium text-slate-700 mb-2">
           Condition (if)
         </label>
         <input
@@ -132,23 +132,23 @@ export default function StepInspector({ jobId, stepId }: StepInspectorProps) {
           value={step.if || ''}
           onChange={handleIfChange}
           placeholder="github.ref == 'refs/heads/main'"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+          className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700 font-mono text-sm"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-slate-500">
           Optional condition expression. Step runs only if condition is true.
         </p>
       </div>
 
       {/* Step Info */}
-      <div className="pt-4 border-t border-gray-200">
+      <div className="pt-4 border-t border-slate-200">
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-500">Step ID:</span>
-            <span className="font-mono text-gray-900">{step.id}</span>
+            <span className="text-slate-500">Step ID:</span>
+            <span className="font-mono text-slate-900">{step.id}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-500">Type:</span>
-            <span className="text-gray-900">
+            <span className="text-slate-500">Type:</span>
+            <span className="text-slate-900">
               {step.uses ? 'Action' : step.run ? 'Run Command' : 'Empty'}
             </span>
           </div>
