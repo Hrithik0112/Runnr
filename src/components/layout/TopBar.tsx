@@ -1,6 +1,8 @@
 import { useWorkflowStore } from '../../stores/workflowStore'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { clearWorkflowFromStorage } from '../../utils/storage'
+import ConfirmModal from '../../components/common/ConfirmModal'
 
 export default function TopBar() {
   const navigate = useNavigate()
@@ -8,7 +10,25 @@ export default function TopBar() {
   const redo = useWorkflowStore((state) => state.redo)
   const canUndo = useWorkflowStore((state) => state.canUndo)
   const canRedo = useWorkflowStore((state) => state.canRedo)
+  const workflow = useWorkflowStore((state) => state.workflow)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
+  const [showClearModal, setShowClearModal] = useState(false)
+
+  // Check if there's any data to clear
+  const hasDataToClear = () => {
+    const jobs = Object.keys(workflow.jobs || {})
+    const hasJobs = jobs.length > 0
+    const hasCustomName = workflow.name && workflow.name !== 'Untitled Workflow'
+    const hasCustomTrigger = workflow.on && (
+      JSON.stringify(workflow.on) !== JSON.stringify({
+        push: { branches: ['main'] }
+      })
+    )
+    
+    return hasJobs || hasCustomName || hasCustomTrigger
+  }
+
+  const canClear = hasDataToClear()
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -62,7 +82,48 @@ export default function TopBar() {
     }
   }, [])
 
+  const handleClearData = () => {
+    // Clear localStorage
+    clearWorkflowFromStorage()
+    
+    // Reset workflow to empty state
+    const emptyWorkflow = {
+      name: 'Untitled Workflow',
+      on: {
+        push: {
+          branches: ['main']
+        }
+      },
+      jobs: {}
+    }
+    
+    // Reset store completely - clear history and reset to empty workflow
+    useWorkflowStore.setState({
+      workflow: emptyWorkflow,
+      history: [emptyWorkflow],
+      historyIndex: 0,
+      canUndo: false,
+      canRedo: false,
+      selectedNode: { type: null }
+    })
+    
+    // Close modal
+    setShowClearModal(false)
+  }
+
   return (
+    <>
+      <ConfirmModal
+        isOpen={showClearModal}
+        onClose={() => setShowClearModal(false)}
+        onConfirm={handleClearData}
+        title="Clear All Data"
+        message="Are you sure you want to clear all workflow data? This action cannot be undone and will remove all jobs, steps, and configuration from local storage."
+        confirmText="Clear Data"
+        cancelText="Cancel"
+        confirmButtonClass="bg-red-600 hover:bg-red-700"
+      />
+      
     <div className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 shadow-sm">
       <div className="flex items-center min-w-0 flex-1 gap-4">
         <button
@@ -157,8 +218,30 @@ export default function TopBar() {
           </svg>
           <span className="hidden sm:inline">Redo</span>
         </button>
+
+        <div className="h-6 w-px bg-slate-200 mx-1"></div>
+
+        <button
+          onClick={() => setShowClearModal(true)}
+          disabled={!canClear}
+          className={`
+            px-3 py-1.5 text-sm font-semibold rounded-lg flex items-center gap-1.5 transition-all duration-200
+            ${canClear
+              ? 'text-red-600 bg-white border border-red-300 hover:bg-red-50 hover:border-red-400'
+              : 'text-slate-400 bg-slate-50 border border-slate-200 cursor-not-allowed'
+            }
+          `}
+          title={canClear ? "Clear all workflow data" : "No data to clear"}
+          aria-label="Clear Data"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          <span className="hidden sm:inline">Clear</span>
+        </button>
       </div>
     </div>
+    </>
   )
 }
 
