@@ -10,7 +10,8 @@ interface ComponentItemProps {
 }
 
 export default function ComponentItem({ id, name, description, icon, onClick }: ComponentItemProps) {
-  // If onClick is provided, don't make it draggable (e.g., trigger)
+  // Make it draggable (except for trigger which is click-only)
+  const isTrigger = id === 'trigger'
   const {
     attributes,
     listeners,
@@ -18,7 +19,7 @@ export default function ComponentItem({ id, name, description, icon, onClick }: 
     transform,
     isDragging,
   } = useDraggable(
-    onClick 
+    isTrigger
       ? { id: `no-drag-${id}`, data: {} }
       : {
           id,
@@ -39,12 +40,12 @@ export default function ComponentItem({ id, name, description, icon, onClick }: 
     <div
       ref={setNodeRef}
       style={style}
-      {...(onClick ? {} : listeners)}
+      {...(isTrigger ? {} : listeners)}
       {...attributes}
       onClick={onClick}
       className={`
         p-3 bg-white rounded-lg border-2 border-gray-200 
-        ${onClick ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'}
+        ${isTrigger ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'}
         hover:border-blue-400 hover:shadow-md
         transition-all duration-200 ease-out
         ${isDragging ? 'shadow-lg border-blue-500 scale-95 opacity-30' : ''}

@@ -1,5 +1,6 @@
 import { Job } from '../../types/workflow'
 import StepList from './StepList'
+import { useDroppable } from '@dnd-kit/core'
 
 interface JobNodeProps {
   job: Job
@@ -10,12 +11,16 @@ interface JobNodeProps {
 }
 
 export default function JobNode({ job, onClick, onStepClick, isSelected, selectedStepId }: JobNodeProps) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `job-drop-${job.id}`,
+  })
   const jobName = job.name || job.id
   const hasDependencies = job.needs && job.needs.length > 0
   const hasSteps = job.steps.length > 0
 
   return (
     <div
+      ref={setNodeRef}
       onClick={onClick}
       className={`
         relative p-5 bg-white rounded-xl border-2 shadow-md cursor-pointer
@@ -24,6 +29,7 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
           ? 'border-blue-500 shadow-lg ring-2 ring-blue-200 scale-105' 
           : 'border-gray-200 hover:border-blue-300 hover:shadow-lg hover:scale-102'
         }
+        ${isOver ? 'border-green-400 bg-green-50 ring-2 ring-green-200' : ''}
       `}
     >
       {/* Header */}
@@ -107,7 +113,18 @@ export default function JobNode({ job, onClick, onStepClick, isSelected, selecte
       {/* Empty state indicator */}
       {!hasSteps && (
         <div className="mt-3 pt-3 border-t border-gray-100">
-          <p className="text-xs text-gray-400 italic">No steps yet</p>
+          <p className="text-xs text-gray-400 italic">
+            {isOver ? 'Drop step here' : 'No steps yet'}
+          </p>
+        </div>
+      )}
+      
+      {/* Drop indicator when dragging step over */}
+      {isOver && (
+        <div className="absolute inset-0 border-2 border-dashed border-green-400 rounded-xl bg-green-50 bg-opacity-50 flex items-center justify-center pointer-events-none z-10">
+          <div className="text-sm font-medium text-green-700 bg-white px-3 py-1 rounded-md shadow-sm">
+            Drop to add step
+          </div>
         </div>
       )}
     </div>
