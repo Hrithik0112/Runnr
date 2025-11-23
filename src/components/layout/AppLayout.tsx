@@ -14,6 +14,8 @@ interface AppLayoutProps {
 export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: AppLayoutProps) {
   const addJob = useWorkflowStore((state) => state.addJob)
   const [showMobileInspector, setShowMobileInspector] = useState(false)
+  const [showYAMLPreview, setShowYAMLPreview] = useState(true)
+  const [rightPanelMode, setRightPanelMode] = useState<'inspector' | 'yaml' | 'split'>('split')
   const [activeId, setActiveId] = useState<string | null>(null)
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -114,9 +116,76 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
               {canvas}
             </div>
 
-            {/* Inspector Panel - Desktop */}
-            <div className="hidden lg:block w-80 bg-white border-l border-gray-200 overflow-y-auto flex-shrink-0">
-              {inspector}
+            {/* Right Panel - Desktop (Inspector and/or YAML Preview) */}
+            <div className="hidden lg:flex w-96 bg-white border-l border-gray-200 flex-shrink-0 flex-col">
+              {/* Panel Tabs */}
+              <div className="flex-shrink-0 border-b border-gray-200 bg-gray-50">
+                <div className="flex">
+                  <button
+                    onClick={() => setRightPanelMode('inspector')}
+                    className={`
+                      flex-1 px-4 py-2 text-xs font-medium transition-colors
+                      ${rightPanelMode === 'inspector' || rightPanelMode === 'split'
+                        ? 'bg-white text-blue-600 border-b-2 border-blue-600'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      }
+                    `}
+                  >
+                    Properties
+                  </button>
+                  <button
+                    onClick={() => setRightPanelMode('yaml')}
+                    className={`
+                      flex-1 px-4 py-2 text-xs font-medium transition-colors
+                      ${rightPanelMode === 'yaml' || rightPanelMode === 'split'
+                        ? 'bg-white text-blue-600 border-b-2 border-blue-600'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      }
+                    `}
+                  >
+                    YAML
+                  </button>
+                  <button
+                    onClick={() => setRightPanelMode('split')}
+                    className={`
+                      px-3 py-2 text-xs font-medium transition-colors
+                      ${rightPanelMode === 'split'
+                        ? 'bg-white text-blue-600 border-b-2 border-blue-600'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      }
+                    `}
+                    title="Split view"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 13a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Panel Content */}
+              <div className="flex-1 flex flex-col overflow-hidden">
+                {/* Inspector Panel */}
+                {(rightPanelMode === 'inspector' || rightPanelMode === 'split') && (
+                  <div className={`
+                    ${rightPanelMode === 'split' ? 'h-1/2 border-b border-gray-200' : 'flex-1'}
+                    overflow-y-auto
+                  `}>
+                    {inspector}
+                  </div>
+                )}
+
+                {/* YAML Preview Panel */}
+                {(rightPanelMode === 'yaml' || rightPanelMode === 'split') && yamlPreview && (
+                  <div className={`
+                    ${rightPanelMode === 'split' ? 'h-1/2' : 'flex-1'}
+                    overflow-hidden
+                    ${rightPanelMode === 'yaml' ? 'border-t border-gray-200' : ''}
+                  `}>
+                    {yamlPreview}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Inspector Panel - Mobile Overlay */}
@@ -161,11 +230,38 @@ export default function AppLayout({ sidebar, canvas, inspector, yamlPreview }: A
             </svg>
           </button>
 
-          {/* YAML Preview Panel */}
-          {yamlPreview && (
-            <div className="h-48 lg:h-64 border-t border-gray-200 bg-white flex-shrink-0">
-              {yamlPreview}
+          {/* YAML Preview Panel - Mobile (Bottom Sheet) */}
+          {yamlPreview && showYAMLPreview && (
+            <div className="lg:hidden fixed inset-x-0 bottom-0 h-3/4 bg-white border-t-2 border-gray-300 shadow-2xl z-50 flex flex-col">
+              <div className="flex-shrink-0 px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-gray-900">YAML Preview</h3>
+                <button
+                  onClick={() => setShowYAMLPreview(false)}
+                  className="p-1 text-gray-400 hover:text-gray-600 rounded-md"
+                  aria-label="Close YAML preview"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="flex-1 overflow-hidden">
+                {yamlPreview}
+              </div>
             </div>
+          )}
+
+          {/* Mobile YAML Preview Toggle Button */}
+          {yamlPreview && !showYAMLPreview && (
+            <button
+              onClick={() => setShowYAMLPreview(true)}
+              className="lg:hidden fixed bottom-4 left-4 p-3 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-colors z-30"
+              aria-label="Open YAML preview"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </button>
           )}
         </div>
       </div>
