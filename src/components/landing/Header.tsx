@@ -1,6 +1,4 @@
-import React from 'react'
-
-const Header = ({ handleNavigateToBuilder }: { handleNavigateToBuilder: () => void }) => {
+const Header = ({ handleNavigateToBuilder, handleNavigateToViewer }: { handleNavigateToBuilder: () => void; handleNavigateToViewer: () => void }) => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-sm border-b border-slate-200/60 transition-all duration-200 max-w-4xl mx-auto">
         <div className="px-4 sm:px-6">
@@ -14,6 +12,12 @@ const Header = ({ handleNavigateToBuilder }: { handleNavigateToBuilder: () => vo
               <span className="text-base font-sans font-medium text-slate-900 transition-colors duration-200 group-hover:text-slate-700">Runnr</span>
             </div>
             <div className="flex items-center gap-2">
+              <button
+                onClick={handleNavigateToViewer}
+                className="px-3 py-1.5 text-slate-600 hover:text-slate-900 text-sm font-sans font-medium rounded-md hover:bg-slate-100 transition-all duration-200 hidden sm:inline-block"
+              >
+                Viewer
+              </button>
               <a
                 href="https://github.com"
                 target="_blank"

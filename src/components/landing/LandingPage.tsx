@@ -12,10 +12,14 @@ export default function LandingPage() {
     navigate('/builder', { replace: true })
   }
 
+  const handleNavigateToViewer = () => {
+    navigate('/viewer', { replace: true })
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 max-w-4xl mx-auto">
-      <Header handleNavigateToBuilder={handleNavigateToBuilder} />
-      <Hero handleNavigateToBuilder={handleNavigateToBuilder} />
+      <Header handleNavigateToBuilder={handleNavigateToBuilder} handleNavigateToViewer={handleNavigateToViewer} />
+      <Hero handleNavigateToBuilder={handleNavigateToBuilder} handleNavigateToViewer={handleNavigateToViewer} />
       <Feature />
       <HowItworks />
       <Footer />
