@@ -6,6 +6,7 @@ import WorkflowCanvas from './components/canvas/WorkflowCanvas'
 import InspectorPanel from './components/inspector/InspectorPanel'
 import YAMLPreview from './components/yaml/YAMLPreview'
 import LandingPage from './components/landing/LandingPage'
+import YAMLViewer from './components/viewer/YAMLViewer'
 
 function App() {
   return (
@@ -22,6 +23,14 @@ function App() {
                 inspector={<InspectorPanel />}
                 yamlPreview={<YAMLPreview />}
               />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/viewer"
+          element={
+            <ErrorBoundary>
+              <YAMLViewer />
             </ErrorBoundary>
           }
         />

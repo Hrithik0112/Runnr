@@ -1,4 +1,4 @@
-const Hero = ( { handleNavigateToBuilder }: { handleNavigateToBuilder: () => void }) => {
+const Hero = ( { handleNavigateToBuilder, handleNavigateToViewer }: { handleNavigateToBuilder: () => void; handleNavigateToViewer: () => void }) => {
   return (
     <section className="pt-28 pb-10 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
@@ -29,8 +29,11 @@ const Hero = ( { handleNavigateToBuilder }: { handleNavigateToBuilder: () => voi
               >
                 Start Building
               </button>
-              <button className="px-6 py-2.5 bg-white text-slate-700 font-sans font-medium text-sm rounded-md border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-colors duration-200 w-full sm:w-auto">
-                Watch Demo
+              <button
+                onClick={handleNavigateToViewer}
+                className="px-6 py-2.5 bg-white text-slate-700 font-sans font-medium text-sm rounded-md border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-colors duration-200 w-full sm:w-auto"
+              >
+                View YAML
               </button>
             </div>
 

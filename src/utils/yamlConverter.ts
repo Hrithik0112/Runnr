@@ -1,5 +1,5 @@
-import { dump } from 'js-yaml'
-import { Workflow } from '../types/workflow'
+import { dump, load } from 'js-yaml'
+import { Workflow, Job, Step } from '../types/workflow'
 
 /**
  * Removes undefined values and empty arrays/objects from the workflow object
@@ -202,6 +202,112 @@ export function validateWorkflow(workflow: Workflow): {
     errors,
     warnings,
     issues,
+  }
+}
+
+/**
+ * Converts YAML string to Workflow object
+ */
+export function yamlToWorkflow(yamlString: string): { workflow: Workflow | null; error: string | null } {
+  try {
+    const parsed = load(yamlString) as any
+    
+    if (!parsed || typeof parsed !== 'object') {
+      return { workflow: null, error: 'Invalid YAML: Expected an object' }
+    }
+
+    // Ensure 'on' trigger exists
+    if (!parsed.on) {
+      return { workflow: null, error: 'Workflow must have an "on" trigger' }
+    }
+
+    // Convert jobs object
+    const jobs: Record<string, Job> = {}
+    
+    if (parsed.jobs && typeof parsed.jobs === 'object') {
+      Object.entries(parsed.jobs).forEach(([jobId, jobData]: [string, any]) => {
+        if (!jobData || typeof jobData !== 'object') {
+          return
+        }
+
+        // Convert steps array
+        const steps: Step[] = []
+        if (Array.isArray(jobData.steps)) {
+          jobData.steps.forEach((stepData: any, index: number) => {
+            if (stepData && typeof stepData === 'object') {
+              const step: any = {
+                id: `step_${jobId}_${index}`,
+                name: stepData.name,
+                uses: stepData.uses,
+                with: stepData.with,
+                run: stepData.run,
+                shell: stepData.shell,
+                env: stepData.env,
+                if: stepData.if,
+              }
+              
+              if (stepData['continue-on-error'] !== undefined) {
+                step['continue-on-error'] = stepData['continue-on-error']
+              }
+              if (stepData['timeout-minutes'] !== undefined) {
+                step['timeout-minutes'] = stepData['timeout-minutes']
+              }
+              if (stepData['working-directory'] !== undefined) {
+                step['working-directory'] = stepData['working-directory']
+              }
+              
+              steps.push(step as Step)
+            }
+          })
+        }
+
+        // Create job object
+        const job: any = {
+          id: jobId,
+          name: jobData.name,
+          'runs-on': jobData['runs-on'] || jobData['runs_on'] || 'ubuntu-latest',
+          needs: jobData.needs,
+          if: jobData.if,
+          steps: steps,
+          outputs: jobData.outputs,
+          env: jobData.env,
+          defaults: jobData.defaults,
+          container: jobData.container,
+          services: jobData.services,
+        }
+        
+        if (jobData.strategy !== undefined) {
+          job.strategy = jobData.strategy
+        }
+        if (jobData['timeout-minutes'] !== undefined) {
+          job['timeout-minutes'] = jobData['timeout-minutes']
+        }
+        if (jobData['continue-on-error'] !== undefined) {
+          job['continue-on-error'] = jobData['continue-on-error']
+        }
+        
+        jobs[jobId] = job as Job
+
+        jobs[jobId] = job
+      })
+    }
+
+    // Create workflow object
+    const workflow: Workflow = {
+      name: parsed.name,
+      on: parsed.on,
+      permissions: parsed.permissions,
+      env: parsed.env,
+      jobs: jobs,
+      concurrency: parsed.concurrency,
+    }
+
+    return { workflow, error: null }
+  } catch (error: any) {
+    return { 
+      workflow: null, 
+      error: error.message || 'Failed to parse YAML' 
+    }
   }
 }
 
